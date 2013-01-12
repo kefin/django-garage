@@ -5,7 +5,7 @@ garage.utils
 Utility functions
 
 * created: 2008-08-11 kevin chan <kefin@makedostudio.com>
-* updated: 2012-09-08 kchan
+* updated: 2013-01-12 kchan
 """
 
 import os
@@ -23,8 +23,6 @@ except ImportError:
     from yaml import Loader, Dumper
 
 from django.conf import settings
-
-from minipylib.crypto import encode_data, decode_data
 
 
 
@@ -230,22 +228,6 @@ def sha1hash(s):
         return hashlib.sha1(repr(s)).hexdigest()
 
 
-def ezencode(data, secret_key=None, encoding='base16'):
-    """
-    Encrypt data and encode in base16 or some other format.
-    """
-    if not secret_key:
-        secret_key = getattr(settings, 'SECRET_KEY')
-    return encode_data(data, secret_key, pickle_data=True, encoding=encoding)
-
-def ezdecode(encrypted, secret_key=None, encoding='base16'):
-    """
-    Decode and decrypt data previously encoded using my_encode_data.
-    """
-    if not secret_key:
-        secret_key = getattr(settings, 'SECRET_KEY')
-    return decode_data(encrypted, secret_key, pickle_data=True, encoding=encoding)
-
 
 # encode/decode functions
 # * note: encode_sdata and decode_sdata do not perform any sort of
@@ -274,53 +256,6 @@ def decode_sdata(encoded_string):
         return pickle.loads(base64.b16decode(encoded_string))
     except:
         return None
-
-
-# utility functions for packing/unpacking cookies
-
-def encode_cookie(data, max_age, magic=None, secret_key=None):
-    """
-    Prep and encode session cookie
-
-    * this is a utility function to prepare a cookie
-
-    Cookie contains the following keys:
-
-    * max_age - max age of cookie before expiration
-    * expiration - expiration time
-    * expiration_timestamp - expiration timestamp in iso8601 format
-    * cookie_timestamp - timestamp of cookie in iso-8601 format
-    * magic - magic code for authenticaton when decoding
-
-    :param secret_key: secret key used for encryption/decryption
-    :returns: encrypted string containing cookie data
-    """
-    if magic is None:
-        magic = ''
-    expire_cookie = datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age)
-    #expiration_timestamp = expire_cookie.strftime("%a, %d %b %Y %H:%M:%S GMT")
-    expiration_timestamp = expire_cookie.strftime("%Y-%m-%dT%H:%M:%S")
-    cookie_timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
-    cookie_data = {
-        'max_age': max_age,
-        'expiration': expire_cookie.isoformat(),
-        'expiration_timestamp': expiration_timestamp,
-        'cookie_timestamp': cookie_timestamp,
-        'magic': magic,
-        'data': data
-    }
-    return ezencode(cookie_data, secret_key=secret_key)
-
-
-def decode_cookie(cookie, secret_key=None):
-    """
-    Decode cookie encoded using above function
-
-    :param cookie: encoded cookie data string
-    :param secret_key: secret key used for encryption/decryption
-    :returns: decoded cookie data
-    """
-    return ezdecode(cookie, secret_key=secret_key)
 
 
 # data object class for storing generic dict key/value pairs

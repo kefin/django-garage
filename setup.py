@@ -26,7 +26,7 @@ setup(
     license = "BSD",
     description = "A collection of useful functions and modules for Django development",
     long_description = README,
-    url = "https://bitbucket.org/kchan",
+    url = "https://bitbucket.org/kchan/django-garage",
     author = "Kevin Chan",
     author_email = "kefin@makedostudio.com",
     classifiers = [

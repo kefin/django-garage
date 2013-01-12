@@ -1,0 +1,21 @@
+syntax: glob
+.DS_Store
+*~
+*.pyc
+*.bak
+*_BAK
+*_BACKUP
+*.bbprojectd
+*.sw[nop]
+\#*\#
+.\#*
+.~*\#
+*_UNUSED
+UNUSED/
+*_OLD
+build
+dist
+*.egg-info/
+.git
+.gitignore
+

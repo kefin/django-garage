@@ -17,7 +17,7 @@ except ImportError:
 from django.core.cache import cache
 
 from garage import get_setting, get_site_id, logger
-from garage.html_utils import safe_str
+from garage.utils import safe_str
 
 
 

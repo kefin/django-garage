@@ -15,7 +15,7 @@ from htmlentitydefs import codepoint2name, name2codepoint
 from markdown import markdown
 from textile import textile
 
-from garage.utils import trim, safe_unicode, safe_str
+from garage.utils import trim, safe_unicode
 
 
 

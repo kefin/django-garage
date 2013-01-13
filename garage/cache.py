@@ -15,9 +15,9 @@ except ImportError:
     import pickle
 
 from django.core.cache import cache
-
-from garage import get_setting, get_site_id, logger
+from garage import get_setting
 from garage.utils import safe_str
+from garage.logger import logger
 
 
 
@@ -48,9 +48,15 @@ def create_cache_key(s, prefix=None):
 # helper function to calculate cache key with site id prefix
 
 def cache_key(s, *args):
+    try:
+        from django.contrib.sites.models import Site
+        current_site = Site.objects.get_current()
+        site_id = current_site.id
+    except (ImportError, AttributeError):
+        site_id = get_setting('SITE_ID', 1)
     s = [s]
     s.extend([a for a in args])
-    return create_cache_key('_'.join(s), prefix='%s_' % str(get_site_id()))
+    return create_cache_key('_'.join(s), prefix='%s_' % str(site_id))
 
 
 # see:

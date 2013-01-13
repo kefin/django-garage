@@ -5,7 +5,7 @@ garage.cache
 Cache helpers.
 
 * created: 2011-03-14 Kevin Chan <kefin@makedostudio.com>
-* updated: 2012-07-17 kchan
+* updated: 2013-01-12 kchan
 """
 
 import hashlib
@@ -74,12 +74,8 @@ def cache_data(cache_key='', timeout=get_setting('OBJECT_CACHE_TIMEOUT')):
                 cache.set(k, result, timeout)
                 if get_setting('CACHE_DEBUG'):
                     logger().debug('Cached data: %s' % k)
-                    # logger().debug('Cached data: %s | data: %s' \
-                    #               % (k, repr(result)))
             else:
                 if get_setting('CACHE_DEBUG'):
-                    # logger().debug('Return cached data: %s | data: %s' \
-                    #               % (k, repr(result)))
                     logger().debug('Return cached data: %s' % k)
             return result
         return _cache_controller

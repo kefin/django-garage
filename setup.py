@@ -3,8 +3,6 @@ setup.py
 
 Setup.py for django-garage.
 
-Copyright (c) 2012-2013 kevin chan <kefin@makedostudio.com>
-
 * created: 2013-01-12 Kevin Chan <kefin@makedostudio.com>
 * updated: 2013-01-12 kchan
 """

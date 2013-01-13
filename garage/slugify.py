@@ -5,7 +5,7 @@ garage.slugify
 Functions to create slugs.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2013-01-05 kchan
+* updated: 2013-01-12 kchan
 """
 
 import re
@@ -15,7 +15,7 @@ from unicodedata import normalize
 from django.core.exceptions import ValidationError
 
 from garage import get_setting
-
+from garage.html_utils import strip_tags, unescape
 
 
 # general slugify function
@@ -26,24 +26,6 @@ SubstChar = u"-"
 def strip_accents(s):
     """Strip accents from string and return ascii version."""
     return normalize('NFKD', unicode(s)).encode('ASCII', 'ignore')
-
-# def slugify(s, delete_chars=SlugDeleteChars):
-#     """Slugify string."""
-#     from garage.utils import trim
-#     from garage.html_utils import strip_html, unescape
-#     s = s.strip("\r\n")
-#     s = s.replace("\n", " ")
-#     s = trim(s)
-#     s = strip_html(strip_accents(unescape(s)))
-#     s = s.replace("–", "-")
-#     s = s.replace("—", "-")
-#     s = s.replace("&amp;", " and ")
-#     s = s.replace("&", " and ")
-#     s = re.sub(r'([0-9]+)%', '\\1-percent', s)
-#     s = s.translate(string.maketrans(' _','--'), delete_chars).lower()
-#     s = re.sub(r'--+', '-', s)
-#     s = s.strip('-')
-#     return s
 
 
 def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):

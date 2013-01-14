@@ -5,7 +5,7 @@ garage.slugify
 Functions to create slugs.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2013-01-12 kchan
+* updated: 2013-01-14 kchan
 """
 
 import re
@@ -43,13 +43,13 @@ def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):
     s = s.decode("utf-8")
     s = s.strip(u"\r\n")
     s = s.replace(u"\n", u" ")
-    s = re.sub(r'[¡]', u'', s)
-    s = s.replace(u"’", u"'")
+    s = strip_accents(s)
     s = strip_tags(unescape(s))
     s = re.sub(r"['’]s", u's', s)
     s = re.sub(r'([0-9\.]+)%', u'\\1-percent', s)
     s = s.replace(u"&amp;", u" and ")
     s = s.replace(u"&", u" and ")
+    s = s.replace(u"/", u" ")
     s = s.replace(u" ", u"-")
     s = s.replace(u"_", u"-")
     s = convert_unwanted_chars(s)

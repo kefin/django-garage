@@ -5,13 +5,16 @@ garage.image_utils
 Image-processing utility functions.
 
 * created: 2012-08-10 Kevin Chan <kefin@makedostudio.com>
-* updated: 2012-09-08 kchan
+* updated: 2014-08-23 kchan
 """
 
 import os.path
 import re
 import imghdr
-import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 
 
 

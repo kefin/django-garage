@@ -4,7 +4,7 @@ setup.py
 Setup.py for django-garage.
 
 * created: 2013-01-12 Kevin Chan <kefin@makedostudio.com>
-* updated: 2013-04-16 kchan
+* updated: 2014-08-23 kchan
 """
 
 import os
@@ -18,7 +18,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = "django-garage",
-    version = "0.1.6",
+    version = "0.1.7",
     packages = ['garage'],
     include_package_data = True,
     license = "BSD",
@@ -44,7 +44,7 @@ setup(
         'django',
         'markdown',
         'textile',
-        'PIL',
+        'Pillow',
         'pyyaml',
         'pytz',
         ]

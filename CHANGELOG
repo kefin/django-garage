@@ -1,12 +1,19 @@
 CHANGELOG
 
-2013-04-16 Kevin Chan <kefin@makedostudio.com>
+2014-08-23  Kevin Chan  <kefin@makedostudio.com>
+
+        * Bumped version to 0.1.7.
+
+        * Updated image_utils to import from Pillow (instead of obsolete
+        PIL).
+
+2013-04-16  Kevin Chan  <kefin@makedostudio.com>
 
         * Added utility functions (garage.datetime) to convert datetime
         objects between timezones.
 
         * Bumped version to 0.1.6.
 
-2013-01-12 Kevin Chan <kefin@makedostudio.com>
+2013-01-12  Kevin Chan  <kefin@makedostudio.com>
 
         * packaged garage repository into preliminary app distribution.

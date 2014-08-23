@@ -5,14 +5,10 @@ garage.datetime
 Datetime and timezone utility functions.
 
 * created: 2013-04-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2013-04-16 kchan
+* updated: 2014-08-23 kchan
 """
 
 import pytz
-
-from django.conf import settings
-from django.utils.timezone import get_current_timezone_name
-
 
 
 def get_local_tz():
@@ -21,6 +17,8 @@ def get_local_tz():
 
     :returns: local timezone object
     """
+    from django.conf import settings
+    from django.utils.timezone import get_current_timezone_name
     local_timezone = getattr(settings, 'TIME_ZONE')
     if not local_timezone:
         local_timezone = get_current_timezone_name()

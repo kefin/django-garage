@@ -5,14 +5,12 @@ garage.slugify
 Functions to create slugs.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2013-01-14 kchan
+* updated: 2014-08-23 kchan
 """
 
 import re
 import string
 from unicodedata import normalize
-
-from django.core.exceptions import ValidationError
 
 from garage import get_setting
 from garage.html_utils import strip_tags, unescape
@@ -102,6 +100,7 @@ def get_slug_base(s, slug_iteration_separator=None):
 
 
 def slug_creation_error(msg=None):
+    from django.core.exceptions import ValidationError
     if msg is None:
         msg = 'Unable to create slug.'
     raise ValidationError(msg)

@@ -5,7 +5,7 @@ garage.utils
 Utility functions
 
 * created: 2008-08-11 kevin chan <kefin@makedostudio.com>
-* updated: 2013-01-12 kchan
+* updated: 2014-08-23 kchan
 """
 
 import os
@@ -21,9 +21,6 @@ try:
     from yaml import CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
-
-from django.conf import settings
-
 
 
 # add directory to module search path (sys.path)

@@ -8,11 +8,6 @@ Utilities and helpers functions.
 * updated: 2014-08-23 kchan
 """
 
-from django.conf import settings
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-
-
 # package version
 VERSION = (0, 1, 7, 'alpha', 0)
 
@@ -58,6 +53,7 @@ def get_version(version=None):
 
 def get_setting(name, default=None):
     """Retrieve attribute from settings."""
+    from django.conf import settings
     return getattr(settings, name, default)
 
 
@@ -65,6 +61,8 @@ def get_setting(name, default=None):
 
 def resp(request, template, context):
     """Shortcut for render_to_response()."""
+    from django.shortcuts import render_to_response
+    from django.template import RequestContext
     return render_to_response(template, context,
                               context_instance=RequestContext(request))
 

@@ -2,10 +2,15 @@ CHANGELOG
 
 2014-08-23  Kevin Chan  <kefin@makedostudio.com>
 
+        * Bumped version to 0.1.8.
+
         * Bumped version to 0.1.7.
 
         * Updated image_utils to import from Pillow (instead of obsolete
         PIL).
+
+        * Claned up sources (moved import statements into functions to
+        avoid potential import glitches).
 
 2013-04-16  Kevin Chan  <kefin@makedostudio.com>
 

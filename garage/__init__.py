@@ -9,7 +9,7 @@ Utilities and helpers functions.
 """
 
 # package version
-VERSION = (0, 1, 7, 'alpha', 0)
+VERSION = (0, 1, 8, 'alpha', 0)
 
 def get_version(version=None):
     """

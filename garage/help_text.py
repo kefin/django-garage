@@ -5,8 +5,10 @@ garage.help_text
 Helper function to retrieve help text for backend admin form views.
 
 * created: 2011-03-18 Kevin Chan <kefin@makedostudio.com>
-* updated: 2012-07-17 kchan
+* updated: 2014-08-26 kchan
 """
+
+from __future__ import unicode_literals
 
 
 # maintain a help text registry for django models
@@ -34,9 +36,11 @@ def get_help_text_registry(module=None):
 
 def get_help_text(module, model, field, default_dict={}):
     """
+    Legacy function for compatiblity with old projects using the
+    `help_text` module.
+
     Get help text for model and field in module help registry.
 
-    # TODO: write example instructions on how to use.
     """
     for d in [get_help_text_registry(module), default_dict]:
         try:

@@ -5,28 +5,31 @@ garage.cache
 Cache helpers.
 
 * created: 2011-03-14 Kevin Chan <kefin@makedostudio.com>
-* updated: 2013-01-12 kchan
+* updated: 2014-08-25 kchan
 """
 
+from __future__ import unicode_literals
+
 import hashlib
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 
 from django.core.cache import cache
+
 from garage import get_setting
-from garage.utils import safe_str
 from garage.logger import logger
 
 
-
 # cache helpers
-# * simple caching for generic functions and objects
 # * uses django caching backend
 
 def s2hex(s):
-    """Convert any string to hex digits (for use as cache key)."""
+    """
+    Convert any string to hex digits hash for use as cache key.
+    * uses MD5 hash from hashlib
+
+    :param s: string to hash
+    :returns: hash of string as hex digits
+    """
+    from garage.text_utils import safe_str
     try:
         return hashlib.md5(s).hexdigest()
     except UnicodeEncodeError:
@@ -35,41 +38,50 @@ def s2hex(s):
         return hashlib.md5(repr(s)).hexdigest()
 
 
-# utility function to create cache key
-# * accepts prefix string
+CACHE_KEY_SEPARATOR = '/'
 
-def create_cache_key(s, prefix=None):
-    """Generate cache key based on input data"""
-    if prefix is None:
-        prefix = ''
-    return '%s%s' % (prefix, s2hex(s))
+def cache_key(name, *args, **kwargs):
+    """
+    helper function to calculate cache key.
+    * accepts the following keyword parameters:
+      key_separator -- separator string to use when concatenating args
+      prefix -- prefix to prepend to key (after hashing)
+
+    :param name: text to create key hash
+    :param args: list of strings to join to "name"
+    :param kwargs: keyword arguments (see code below for keywords)
+    :returns: hashed key
+    """
+    key_separator = kwargs.get('key_separator', CACHE_KEY_SEPARATOR)
+    prefix = kwargs.get('prefix')
+    if not hasattr(name, '__iter__'):
+        name = [name]
+    if len(args) > 0:
+        name.extend(args)
+    key = s2hex(key_separator.join(name))
+    if prefix is not None:
+        key = '%s%s' % (prefix, key)
+    return key
+
+def create_cache_key(name, *args, **kwargs):
+    """
+    Same as cache_key (for compatibility with legacy function).
+    """
+    return cache_key(name, *args, **kwargs)
 
 
-# helper function to calculate cache key with site id prefix
+DEFAULT_TIMEOUT = 1800
 
-def cache_key(s, *args):
-    try:
-        from django.contrib.sites.models import Site
-        current_site = Site.objects.get_current()
-        site_id = current_site.id
-    except (ImportError, AttributeError):
-        site_id = get_setting('SITE_ID', 1)
-    s = [s]
-    s.extend([a for a in args])
-    return create_cache_key('_'.join(s), prefix='%s_' % str(site_id))
-
-
-# see:
-# http://djangosnippets.org/snippets/492/
-
-def cache_data(cache_key='', timeout=get_setting('OBJECT_CACHE_TIMEOUT')):
+def cache_data(cache_key='',
+               timeout=get_setting('OBJECT_CACHE_TIMEOUT', DEFAULT_TIMEOUT)):
     """
     Decorator to cache objects.
+    * see: http://djangosnippets.org/snippets/492/
     """
     def decorator(f):
         def _cache_controller(*args, **kwargs):
-            if not get_setting('USE_MINI_CACHE'):
-                return f(*args, **kwargs)
+            # if not get_setting('USE_MINI_CACHE'):
+            #     return f(*args, **kwargs)
             if isinstance(cache_key, basestring):
                 k = cache_key % locals()
             elif callable(cache_key):
@@ -92,8 +104,8 @@ def delete_cache(cache_key):
     """
     Delete cached object.
     """
-    if not get_setting('USE_MINI_CACHE'):
-        return False
+    # if not get_setting('USE_MINI_CACHE'):
+    #     return False
     if cache.get(cache_key):
         cache.set(cache_key, None, 0)
         result = True

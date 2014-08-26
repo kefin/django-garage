@@ -5,13 +5,12 @@ garage.logger
 Logging for debug purposes.
 
 * created: 2011-03-13 Kevin Chan <kefin@makedostudio.com>
-* updated: 2012-07-17 kchan
+* updated: 2014-08-24 kchan
 """
 
+from __future__ import unicode_literals
+
 import logging
-
-from garage import get_setting
-
 
 
 # settings for debug log - add to project settings:
@@ -31,7 +30,7 @@ log_levels = {
     'warning': logging.WARNING,
     'error': logging.ERROR,
     'critical': logging.CRITICAL
-    }
+}
 
 log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
@@ -71,6 +70,7 @@ def logger():
     """
     :return: simple logger object.
     """
+    from garage import get_setting
     global DebugLogger
     if not DebugLogger:
         proj = get_setting('LOG_PROJECT_CODE')

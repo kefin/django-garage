@@ -1,0 +1,29 @@
+# -*- coding: utf-8 -*-
+"""
+garage.session
+
+Helper functions to set/get session data.
+
+* created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
+* updated: 2014-08-24 kchan
+"""
+
+from __future__ import unicode_literals
+
+
+# get/set session vars
+
+def set_session_var(request, skey, sval):
+    """Set key-value in session cookie."""
+    try:
+        request.session[skey] = sval
+    except (TypeError, AttributeError):
+        pass
+
+
+def get_session_var(request, skey, default=None):
+    """Get value from session cookie."""
+    try:
+        return request.session.get(skey, default)
+    except (TypeError, AttributeError):
+        return default

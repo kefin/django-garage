@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 
 import six
 import os
-import sys
 import re
 import hashlib
 import base64

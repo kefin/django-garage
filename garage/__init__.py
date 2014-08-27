@@ -11,7 +11,6 @@ Utilities and helpers functions.
 from __future__ import unicode_literals
 
 from garage.exceptions import ImproperlyConfigured
-from garage.session import set_session_var, get_session_var
 
 
 # package version
@@ -74,3 +73,7 @@ def resp(request, template, context):
     from django.template import RequestContext
     return render_to_response(template, context,
                               context_instance=RequestContext(request))
+
+
+# for compatibility with old version
+from garage.session import set_session_var, get_session_var

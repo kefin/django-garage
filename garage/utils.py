@@ -339,3 +339,26 @@ def get_file_ext(filename):
     :returns: tuple of file base name and extension (extension is '' if none)
     """
     return os.path.splitext(filename)
+
+
+# for compatibiity with old versions
+
+def cvt2list(s):
+    """Convert object to list"""
+    if not hasattr(s, '__iter__'):
+        s = [s]
+    return s
+
+
+from text_utils import (
+    trim,
+    check_eos,
+    has_digits,
+    has_alpha,
+    has_alphanum,
+    to_camel_case,
+    substitute,
+    subs,
+    safe_unicode,
+    safe_str
+)

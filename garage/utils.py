@@ -5,13 +5,14 @@ garage.utils
 Utility functions
 
 * created: 2008-08-11 kevin chan <kefin@makedostudio.com>
-* updated: 2014-08-25 kchan
+* updated: 2014-08-26 kchan
 """
 
 from __future__ import unicode_literals
 
 import six
 import os
+import sys
 import re
 import hashlib
 import base64

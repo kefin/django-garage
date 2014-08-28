@@ -5,12 +5,23 @@ garage
 Utilities and helpers functions.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-26 kchan
+* updated: 2014-08-27 kchan
 """
 
 from __future__ import unicode_literals
 
-from garage.exceptions import ImproperlyConfigured
+import warnings
+
+try:
+    from django.core.exceptions import ImproperlyConfigured
+    from django.conf import settings as _django_settings
+    warnings.warn('Unable to import Django settings! Please check your setup '
+                  'and make sure Django is installed and your project settings '
+                  'are loaded correctly.', RuntimeWarning)
+except (ImportError, ImproperlyConfigured):
+    from garage.utils import DataObject
+    _django_settings = DataObject()
+
 
 
 # package version
@@ -58,11 +69,7 @@ def get_version(version=None):
 
 def get_setting(name, default=None):
     """Retrieve attribute from settings."""
-    try:
-        from django.conf import settings
-        return getattr(settings, name, default)
-    except (ImportError, ImproperlyConfigured):
-        return default
+    return getattr(_django_settings, name, default)
 
 
 # legacy functions for compatibility with old imports

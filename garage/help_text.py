@@ -5,10 +5,18 @@ garage.help_text
 Helper function to retrieve help text for backend admin form views.
 
 * created: 2011-03-18 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-26 kchan
+* updated: 2014-08-27 kchan
 """
 
 from __future__ import unicode_literals
+
+import warnings
+
+# issue deprecation warning
+# * This module is here for compatibility with old imports but will be
+#   phased out in the next minor version.
+warnings.warn('The help_text module will be deprecated in version 0.2.1. ',
+              DeprecationWarning)
 
 
 # maintain a help text registry for django models

@@ -98,6 +98,36 @@ class CacheTests(SimpleTestCase):
         cached_data = django_cache.get(key)
         self.assertFalse(cached_data)
 
+        # test cache_data without providing key
+
+        @cache_data()
+        def dummy_func(*args):
+            return u'_'.join([safe_str(a) for a in args])
+
+        key = dummy_func.__name__
+
+        # make sure data is not in cache
+        cached_data = django_cache.get(key)
+        self.assertFalse(cached_data)
+
+        # cache data
+        some_data = [u'abcd1234', u'l’écriture', u'寫作']
+        result = dummy_func(*some_data)
+
+        # test if data is in cache
+        cached_data = django_cache.get(key)
+
+        self._msg('test', 'cache_data (without key)', first=True)
+        self._msg('key', key)
+        self._msg('some_data', repr(some_data))
+        self._msg('result', result)
+        self._msg('cached_data', cached_data)
+        self.assertEqual(result, cached_data)
+        delete_cache(key)
+        cached_data = django_cache.get(key)
+        self.assertFalse(cached_data)
+
+
     def test_delete_cache(self):
         """
         Ensure delete_cache function is working.

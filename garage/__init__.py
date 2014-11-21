@@ -26,7 +26,7 @@ except (ImportError, ImproperlyConfigured):
 
 # package version
 __author__ = 'Kevin Chan'
-__version_info__ = (0, 1, 10)
+__version_info__ = (0, 1, 11)
 __version__ = '.'.join(map(str, __version_info__))
 
 VERSION = __version_info__

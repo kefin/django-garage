@@ -15,9 +15,6 @@ import warnings
 try:
     from django.core.exceptions import ImproperlyConfigured
     from django.conf import settings as _django_settings
-    # warnings.warn('Unable to import Django settings! Please check your setup '
-    #               'and make sure Django is installed and your project settings '
-    #               'are loaded correctly.', RuntimeWarning)
 except (ImportError, ImproperlyConfigured):
     from garage.utils import DataObject
     _django_settings = DataObject()
@@ -29,7 +26,7 @@ except (ImportError, ImproperlyConfigured):
 
 # package version
 __author__ = 'Kevin Chan'
-__version_info__ = (0, 1, 8)
+__version_info__ = (0, 1, 10)
 __version__ = '.'.join(map(str, __version_info__))
 
 VERSION = __version_info__

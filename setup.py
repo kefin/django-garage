@@ -28,7 +28,7 @@ setup(
     author = "Kevin Chan",
     author_email = "kefin@makedostudio.com",
     classifiers = [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
@@ -39,13 +39,15 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        ],
+    ],
     install_requires = [
+        'six',
         'django',
         'markdown',
         'textile',
         'Pillow',
         'pyyaml',
         'pytz',
-        ]
+        'mock',
+    ]
 )

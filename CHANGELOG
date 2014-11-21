@@ -2,6 +2,9 @@ CHANGELOG
 
 2014-11-21  Kevin Chan  <kefin@makedostudio.com>
 
+	* Updated strings to use unicode liteals (dispense with u'...').
+	* Converted print to use print function (with from __future__
+	import print_function).
         * Bumped version to 0.1.10.
         * Added garage.tests.imports -- test various functions, classes
         and vars to ensure they are importable/exist.

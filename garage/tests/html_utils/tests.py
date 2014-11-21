@@ -13,7 +13,7 @@ from __future__ import (absolute_import, unicode_literals)
 from garage.test import SimpleTestCase
 
 
-ExampleText = u"""
+ExampleText = """
 ## Fruits
 
 * apples
@@ -25,7 +25,7 @@ ExampleText = u"""
 lorem ipsum...
 """
 
-ConvertedHtmlText = u"""\
+ConvertedHtmlText = """\
 <h2>Fruits</h2>
 <ul>
 <li>apples</li>
@@ -36,7 +36,7 @@ ConvertedHtmlText = u"""\
 <p>lorem ipsum...</p>\
 """
 
-PlainText = u"""\
+PlainText = """\
 Fruits
 
 apples

@@ -138,7 +138,7 @@ def dump_yaml(data, **opts):
     Dump data structure in yaml format.
 
     example usage:
-    print dump_yaml(y, explicit_start=True, default_flow_style=False)
+    print(dump_yaml(y, explicit_start=True, default_flow_style=False))
 
     :param data: data structure
     :param opts: optional parameters for yaml engine

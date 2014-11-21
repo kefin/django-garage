@@ -22,8 +22,8 @@ class SlugifyTests(SimpleTestCase):
         from garage.slugify import strip_accents
         self._msg('test', 'strip_accents', first=True)
 
-        txt = u'écriture 寫作'
-        expected = u'ecriture '
+        txt = 'écriture 寫作'
+        expected = 'ecriture '
         result = strip_accents(txt)
         self._msg('text', txt)
         self._msg('result', result)
@@ -37,16 +37,16 @@ class SlugifyTests(SimpleTestCase):
         from garage.slugify import slugify
         self._msg('test', 'slugify', first=True)
 
-        txt = u'The Renaissance of Giselle “G” Töngi'
-        expected = u'the-renaissance-of-giselle-g-tongi'
+        txt = 'The Renaissance of Giselle “G” Töngi'
+        expected = 'the-renaissance-of-giselle-g-tongi'
         result = slugify(txt)
         self._msg('text', txt)
         self._msg('result', result)
         self._msg('expected', expected)
         self.assertEqual(result, expected)
 
-        txt = u'Apoyan resolución a favor de niños migrantes en LA'
-        expected = u'apoyan-resolucion-a-favor-de-ninos-migrantes-en-la'
+        txt = 'Apoyan resolución a favor de niños migrantes en LA'
+        expected = 'apoyan-resolucion-a-favor-de-ninos-migrantes-en-la'
         result = slugify(txt)
         self._msg('text', txt)
         self._msg('result', result)

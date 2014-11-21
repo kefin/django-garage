@@ -17,8 +17,8 @@ from unicodedata import normalize
 
 # general slugify function
 
-SlugDeleteChars = u"""'"‘’“”:;,~!@#$%^*()_+`=<>./?\\|—–"""
-SubstChar = u"-"
+SlugDeleteChars = """'"‘’“”:;,~!@#$%^*()_+`=<>./?\\|—–"""
+SubstChar = "-"
 
 def strip_accents(s):
     """Strip accents from string and return ascii version."""
@@ -37,28 +37,28 @@ def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):
             if ch in delete_chars:
                 ch = subst_char
             converted.append(ch)
-        return u''.join(converted)
+        return ''.join(converted)
 
     try:
         s = s.decode("utf-8")
     except UnicodeEncodeError:
         s = safe_unicode(s)
-    s = s.strip(u"\r\n")
-    s = s.replace(u"\n", u" ")
+    s = s.strip("\r\n")
+    s = s.replace("\n", " ")
     s = strip_accents(s)
     s = strip_tags(unescape(s))
-    s = re.sub(r"['’]s", u's', s)
-    s = re.sub(r'([0-9\.]+)%', u'\\1-percent', s)
-    s = s.replace(u"&amp;", u" and ")
-    s = s.replace(u"&", u" and ")
-    s = s.replace(u"/", u" ")
-    s = s.replace(u" ", u"-")
-    s = s.replace(u"_", u"-")
+    s = re.sub(r"['’]s", 's', s)
+    s = re.sub(r'([0-9\.]+)%', '\\1-percent', s)
+    s = s.replace("&amp;", " and ")
+    s = s.replace("&", " and ")
+    s = s.replace("/", " ")
+    s = s.replace(" ", "-")
+    s = s.replace("_", "-")
     s = convert_unwanted_chars(s)
-    s = re.sub(r'\.\.+', u'.', s)
-    s = re.sub(r'--+', u'-', s)
-    s = s.strip(u'.')
-    s = s.strip(u'-')
+    s = re.sub(r'\.\.+', '.', s)
+    s = re.sub(r'--+', '-', s)
+    s = s.strip('.')
+    s = s.strip('-')
     s = s.lower()
     return s
 

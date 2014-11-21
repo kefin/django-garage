@@ -4,7 +4,7 @@ django-garage
 Django-garage is a collection of useful functions and modules for
 building Django applications and projects.
 
-The current version is still in alpha development.
+Current version: 0.1.10
 
 
 ## Contact Info

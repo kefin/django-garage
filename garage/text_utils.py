@@ -8,7 +8,7 @@ Utility text and string processing functions
 * updated: 2014-11-21 kchan
 """
 
-from __future__ import (absolute_import, unicode_literals)
+from __future__ import (absolute_import, unicode_literals, print_function)
 
 import six
 import re
@@ -25,9 +25,9 @@ def uprint(data, encoding=default_encoding):
     :param encoding: data encoding (default is `utf-8`).
     """
     try:
-        print data.encode(encoding)
+        print(data.encode(encoding))
     except AttributeError:
-        print data
+        print(data)
 
 
 # utility string functions

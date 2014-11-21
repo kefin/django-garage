@@ -18,7 +18,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = "django-garage",
-    version = "0.1.10",
+    version = "0.1.11",
     packages = ['garage'],
     include_package_data = True,
     license = "BSD",

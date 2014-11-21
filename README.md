@@ -14,4 +14,4 @@ kefin@makedostudio.com.
 
 On bitbucket:
 
-* https://bitbucket.org/kchan/
+* https://bitbucket.org/kchan/django-garage

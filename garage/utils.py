@@ -350,7 +350,7 @@ def cvt2list(s):
     return s
 
 
-from text_utils import (
+from garage.text_utils import (
     trim,
     check_eos,
     has_digits,

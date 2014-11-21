@@ -5,46 +5,42 @@ garage
 Utilities and helpers functions.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-23 kchan
+* updated: 2014-11-21 kchan
 """
 
+from __future__ import (absolute_import, unicode_literals)
+
+import warnings
+
+try:
+    from django.core.exceptions import ImproperlyConfigured
+    from django.conf import settings as _django_settings
+except (ImportError, ImproperlyConfigured):
+    from garage.utils import DataObject
+    _django_settings = DataObject()
+    warnings.warn('Unable to import Django settings! Please check your setup '
+                  'and make sure Django is installed and your project settings '
+                  'are loaded correctly.', RuntimeWarning)
+
+
+
 # package version
-VERSION = (0, 1, 8, 'alpha', 0)
+__author__ = 'Kevin Chan'
+__version_info__ = (0, 1, 10)
+__version__ = '.'.join(map(str, __version_info__))
+
+VERSION = __version_info__
 
 def get_version(version=None):
     """
-    Copied from django.utils.version.
-
-    Returns a PEP 386-compliant version number from VERSION.
+    Returns a PEP 440 version string (in the form of major.minor.micro).
+    Http://legacy.python.org/dev/peps/pep-0440/
     """
     if version is None:
-        version = VERSION
-    else:
-        assert len(version) == 5
-        assert version[3] in ('alpha', 'beta', 'rc', 'final')
-
-    # Now build the two parts of the version number:
-    # main = X.Y[.Z]
-    # sub = .devN - for pre-alpha releases
-    #     | {a|b|c}N - for alpha, beta and rc releases
-
-    parts = 2 if version[2] == 0 else 3
-    main = '.'.join(str(x) for x in version[:parts])
-
-    sub = ''
-
-    # * Not used for this package.
-    # if version[3] == 'alpha' and version[4] == 0:
-    #     git_changeset = get_git_changeset()
-    #     if git_changeset:
-    #         sub = '.dev%s' % git_changeset
-    # elif version[3] != 'final':
-
-    if version[3] != 'final':
-        mapping = {'alpha': 'a', 'beta': 'b', 'rc': 'c'}
-        sub = mapping[version[3]] + str(version[4])
-
-    return main + sub
+        version = __version_info__
+    if isinstance(version, (list, tuple)):
+        version = '.'.join(map(str, version))
+    return version
 
 
 # helper functions and shortcuts
@@ -53,11 +49,10 @@ def get_version(version=None):
 
 def get_setting(name, default=None):
     """Retrieve attribute from settings."""
-    from django.conf import settings
-    return getattr(settings, name, default)
+    return getattr(_django_settings, name, default)
 
 
-# shortcuts
+# legacy functions for compatibility with old imports
 
 def resp(request, template, context):
     """Shortcut for render_to_response()."""
@@ -67,19 +62,5 @@ def resp(request, template, context):
                               context_instance=RequestContext(request))
 
 
-# get/set session vars
-
-def set_session_var(request, skey, sval):
-    """Set key-value in session cookie."""
-    try:
-        request.session[skey] = sval
-    except (TypeError, AttributeError):
-        pass
-
-
-def get_session_var(request, skey, default=None):
-    """Get value from session cookie."""
-    try:
-        return request.session.get(skey)
-    except (TypeError, AttributeError):
-        return None
+# for compatibility with old version
+from garage.session import set_session_var, get_session_var

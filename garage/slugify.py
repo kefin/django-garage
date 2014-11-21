@@ -5,31 +5,32 @@ garage.slugify
 Functions to create slugs.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-23 kchan
+* updated: 2014-11-21 kchan
 """
+
+from __future__ import (absolute_import, unicode_literals)
 
 import re
 import string
 from unicodedata import normalize
 
-from garage import get_setting
-from garage.html_utils import strip_tags, unescape
-
 
 # general slugify function
 
-SlugDeleteChars = """'"‘’“”:;,~!@#$%^*()_+`=<>./?\\|—–"""
+SlugDeleteChars = u"""'"‘’“”:;,~!@#$%^*()_+`=<>./?\\|—–"""
 SubstChar = u"-"
 
 def strip_accents(s):
     """Strip accents from string and return ascii version."""
-    return normalize('NFKD', unicode(s)).encode('ASCII', 'ignore')
+    return unicode(normalize('NFKD', unicode(s)).encode('ASCII', 'ignore'))
 
 
 def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):
     """
     Convert (unicode) string to slug.
     """
+    from garage.text_utils import safe_unicode
+    from garage.html_utils import strip_tags, unescape
     def convert_unwanted_chars(txt):
         converted = []
         for ch in txt:
@@ -38,7 +39,10 @@ def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):
             converted.append(ch)
         return u''.join(converted)
 
-    s = s.decode("utf-8")
+    try:
+        s = s.decode("utf-8")
+    except UnicodeEncodeError:
+        s = safe_unicode(s)
     s = s.strip(u"\r\n")
     s = s.replace(u"\n", u" ")
     s = strip_accents(s)
@@ -66,6 +70,7 @@ SLUG_SEPARATOR = '-'
 SLUG_ITERATION_SEPARATOR = '--'
 
 def get_slug_separator():
+    from garage import get_setting
     return get_setting('SLUG_SEPARATOR', SLUG_SEPARATOR)
 
 def get_slug_iteration_separator():
@@ -75,6 +80,7 @@ def get_slug_iteration_separator():
     e.g. article (first entry)
          article--2 (second entry)
     """
+    from garage import get_setting
     return get_setting('SLUG_ITERATION_SEPARATOR', SLUG_ITERATION_SEPARATOR)
 
 

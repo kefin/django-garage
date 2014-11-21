@@ -18,4 +18,4 @@ dist
 *.egg-info/
 .git
 .gitignore
-
+*.orig

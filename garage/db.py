@@ -2,16 +2,15 @@
 """
 garage.db
 
-Database and queryset helper functions
+Django database and queryset helper functions
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2012-07-17 kchan
+* updated: 2014-11-21 kchan
 """
 
+from __future__ import (absolute_import, unicode_literals)
+
 import copy
-
-from garage import get_setting
-
 
 
 # batch queryset iterator
@@ -36,20 +35,22 @@ from garage import get_setting
 
 # batch size for queryset iterator
 # * number of entries to retrieve and iterate in batches
-QS_BATCH_SIZE = 50
+DEFAULT_QS_BATCH_SIZE = 50
 
-def batch_qs(qs, batch_size=get_setting('QS_BATCH_SIZE', QS_BATCH_SIZE)):
+def batch_qs(qs, batch_size=DEFAULT_QS_BATCH_SIZE):
     """
     Returns a (start, end, total, queryset) tuple for each batch in the given
     queryset.
 
     Usage:
+
     # Make sure to order your querset
     article_qs = Article.objects.order_by('id')
     for start, end, total, qs in batch_qs(article_qs):
-    print "Now processing %s - %s of %s" % (start + 1, end, total)
-    for article in qs:
-    print article.body
+        print "Now processing %s - %s of %s" % (start + 1, end, total)
+        for article in qs:
+            print article.body
+
     """
     total = qs.count()
     for start in range(0, total, batch_size):
@@ -57,12 +58,13 @@ def batch_qs(qs, batch_size=get_setting('QS_BATCH_SIZE', QS_BATCH_SIZE)):
         yield (start, end, total, qs[start:end])
 
 
-# clone objects
-#
-# from:
-# http://djangosnippets.org/snippets/1271/
-
 class ClonableMixin(object):
+    """
+    Model mixin with method to clone objects.
+    * from:
+      http://djangosnippets.org/snippets/1271/
+    """
+
     def clone(self):
         """Return an identical copy of the instance with a new ID."""
         if not self.pk:
@@ -80,14 +82,13 @@ class ClonableMixin(object):
         return duplicate
 
 
-# See:
-# http://www.bromer.eu/2009/05/23/a-generic-copyclone-action-for-django-11/
-# http://djangosnippets.org/snippets/1271/
-# * The function below combines code from the above reference articles.
-
 def clone_objects(objects):
     """
     Generic model object cloner function.
+    * see:
+      http://www.bromer.eu/2009/05/23/a-generic-copyclone-action-for-django-11/
+      http://djangosnippets.org/snippets/1271/
+    * The function below combines code from the above reference articles.
     """
     def clone(obj):
         """Return an identical copy of the instance with a new ID."""

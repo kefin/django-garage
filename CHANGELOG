@@ -1,14 +1,26 @@
 CHANGELOG
 
+2014-11-21  Kevin Chan  <kefin@makedostudio.com>
+
+        * Bumped version to 0.1.10.
+        * Added garage.tests.imports -- test various functions, classes
+        and vars to ensure they are importable/exist.
+        * Corrected misplacement of warning message under import django
+        settings.
+        * Corrected mistake in module_exists function; added
+        function_exists and var_exists (garage.test.utils).
+        * Bumped version to 0.1.9.
+        * Added/updated from __future__ import statements (import
+        absolute_import, unicode_literals).
+        * Change import text_utils to import garage.text_utils (use
+        abosolute import) (utils).
+
 2014-08-23  Kevin Chan  <kefin@makedostudio.com>
 
         * Bumped version to 0.1.8.
-
         * Bumped version to 0.1.7.
-
         * Updated image_utils to import from Pillow (instead of obsolete
         PIL).
-
         * Claned up sources (moved import statements into functions to
         avoid potential import glitches).
 
@@ -16,7 +28,6 @@ CHANGELOG
 
         * Added utility functions (garage.datetime) to convert datetime
         objects between timezones.
-
         * Bumped version to 0.1.6.
 
 2013-01-12  Kevin Chan  <kefin@makedostudio.com>

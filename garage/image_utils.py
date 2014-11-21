@@ -2,11 +2,15 @@
 """
 garage.image_utils
 
-Image-processing utility functions.
+Image-processing utility functions.
+* Note: These functions read and write image files on a local file
+  system.
 
 * created: 2012-08-10 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-23 kchan
+* updated: 2014-11-21 kchan
 """
+
+from __future__ import (absolute_import, unicode_literals)
 
 import os.path
 import re
@@ -24,7 +28,7 @@ DEFAULT_IMG_QUALITY = 75
 RE_PATS = [
 	r'^(.*)([_\-][0-9]+x[0-9]+)(\.[^\.]+)$',
 	r'^(.*)(\.[^\.]+)$'
-    ]
+]
 Regexp = None
 DEFAULT_FNAME = 'image'
 

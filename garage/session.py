@@ -5,10 +5,10 @@ garage.session
 Helper functions to set/get session data.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-24 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 
 # get/set session vars

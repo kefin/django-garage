@@ -5,10 +5,10 @@ garage.datetime
 Datetime and timezone utility functions.
 
 * created: 2013-04-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-25 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 import pytz
 

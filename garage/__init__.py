@@ -5,10 +5,10 @@ garage
 Utilities and helpers functions.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-27 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 import warnings
 

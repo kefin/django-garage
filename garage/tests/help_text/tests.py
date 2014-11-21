@@ -5,7 +5,7 @@ tests.help_text.tests
 Tests for garage.help_text
 
 * created: 2014-08-23 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-27 kchan
+* updated: 2014-11-21 kchan
 """
 
 from garage.test import SimpleTestCase

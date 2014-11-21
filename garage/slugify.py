@@ -5,10 +5,10 @@ garage.slugify
 Functions to create slugs.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-24 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 import re
 import string

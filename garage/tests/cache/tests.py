@@ -5,10 +5,10 @@ tests.cache.tests
 Tests for garage.cache
 
 * created: 2014-08-23 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-25 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 from garage.test import SimpleTestCase
 

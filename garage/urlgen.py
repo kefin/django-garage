@@ -38,7 +38,7 @@ page = uri.generate('page', {'search': 'unus', 'order': 'name', 'page': 15})
 
 
 * created: 2011-01-07 Kevin Chan <kefin@makedostudio.com>
-* updated: 2011-01-07 kchan
+* updated: 2014-11-21 kchan
 """
 
 

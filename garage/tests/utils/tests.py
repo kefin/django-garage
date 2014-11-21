@@ -5,10 +5,10 @@ tests.utils.tests
 Tests for garage.utils
 
 * created: 2014-08-24 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-25 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 import os
 import sys

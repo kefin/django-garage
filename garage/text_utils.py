@@ -5,10 +5,10 @@ helpers.text_utils
 Utility text and string processing functions
 
 * created: 2013-10-27 kevin chan <kefin@makedostudio.com>
-* updated: 2014-08-25 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 import six
 import re

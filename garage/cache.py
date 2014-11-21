@@ -5,10 +5,10 @@ garage.cache
 Cache helpers.
 
 * created: 2011-03-14 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-08-28 kchan
+* updated: 2014-11-21 kchan
 """
 
-from __future__ import unicode_literals
+from __future__ import (absolute_import, unicode_literals)
 
 import six
 import functools
@@ -72,7 +72,7 @@ def create_cache_key(name, *args, **kwargs):
 
 DEFAULT_TIMEOUT = 1800
 
-def cache_data(key=None, timeout=DEFAULT_TIMEOUT)):
+def cache_data(key=None, timeout=DEFAULT_TIMEOUT):
     """
     Decorator to cache objects.
     * see: http://djangosnippets.org/snippets/492/

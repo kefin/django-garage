@@ -10,6 +10,9 @@ Utility functions for tests (using Django test runner).
 
 from __future__ import (absolute_import, unicode_literals)
 
+import importlib
+import inspect
+
 from garage.test.settings import DIVIDER
 
 
@@ -38,11 +41,46 @@ def module_exists(module_name):
     :returns: True if importable else False
     """
     try:
-        __import__(module_name)
+        importlib.import_module(module_name)
     except ImportError:
         return False
     else:
         return True
+
+
+def function_exists(mod, func):
+    """
+    Test if function exists in module.
+    * see: http://stackoverflow.com/questions/20926909/
+
+    :param mod: module name (e.g. garage.utils)
+    :param func: function name
+    :returns: True if exists, else False
+    """
+    try:
+        m = importlib.import_module(mod)
+        f = getattr(m, func)
+        return inspect.isfunction(f)
+    except ImportError:
+        pass
+    return False
+
+
+def var_exists(mod, var_name):
+    """
+    Test if variable exists in module.
+    * see: http://stackoverflow.com/questions/20926909/
+
+    :param mod: module name (e.g. garage.utils)
+    :param var_name: variable name
+    :returns: True if exists, else False
+    """
+    try:
+        m = importlib.import_module(mod)
+        return var_name in dir(m)
+    except (ImportError, AttributeError):
+        pass
+    return False
 
 
 class DummyObject(object):

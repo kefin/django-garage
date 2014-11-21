@@ -20,8 +20,8 @@ class CacheTests(SimpleTestCase):
         Ensure s2hex function returns proper values.
         """
         from garage.cache import s2hex
-        some_string = u'abcd1234 l’écriture 寫作'
-        md5hash = u'3dc75e194bf9b951120746625998bc70'
+        some_string = 'abcd1234 l’écriture 寫作'
+        md5hash = '3dc75e194bf9b951120746625998bc70'
         result = s2hex(some_string)
         self._msg('test', 's2hex', first=True)
         self._msg('some_string', some_string)
@@ -33,9 +33,9 @@ class CacheTests(SimpleTestCase):
         Ensure cache_key function is working.
         """
         from garage.cache import s2hex, cache_key
-        some_string = u'abcd1234 l’écriture 寫作'
-        md5hash = u'3dc75e194bf9b951120746625998bc70'
-        prefix = u'CACHE:'
+        some_string = 'abcd1234 l’écriture 寫作'
+        md5hash = '3dc75e194bf9b951120746625998bc70'
+        prefix = 'CACHE:'
         key = '%s%s' % (prefix, s2hex(some_string))
         result = cache_key(some_string, prefix=prefix)
         self._msg('test', 'create_cache_key', first=True)
@@ -50,7 +50,7 @@ class CacheTests(SimpleTestCase):
         Ensure create_cache_key function is working.
         """
         from garage.cache import create_cache_key, cache_key
-        some_string = u'abcd1234 l’écriture 寫作'
+        some_string = 'abcd1234 l’écriture 寫作'
         key = create_cache_key(some_string)
         result = cache_key(some_string)
         self._msg('test', 'cache_key', first=True)
@@ -70,18 +70,18 @@ class CacheTests(SimpleTestCase):
         from garage.cache import cache_key, cache_data, delete_cache
         from garage.text_utils import safe_str
 
-        key = u'abcd1234'
+        key = 'abcd1234'
 
         @cache_data(key)
         def dummy_func(*args):
-            return u'_'.join([safe_str(a) for a in args])
+            return '_'.join([safe_str(a) for a in args])
 
         # make sure data is not in cache
         cached_data = django_cache.get(key)
         self.assertFalse(cached_data)
 
         # cache data
-        some_data = [u'abcd1234', u'l’écriture', u'寫作']
+        some_data = ['abcd1234', 'l’écriture', '寫作']
         result = dummy_func(*some_data)
 
         # test if data is in cache
@@ -102,7 +102,7 @@ class CacheTests(SimpleTestCase):
 
         @cache_data()
         def dummy_func(*args):
-            return u'_'.join([safe_str(a) for a in args])
+            return '_'.join([safe_str(a) for a in args])
 
         key = dummy_func.__name__
 
@@ -111,7 +111,7 @@ class CacheTests(SimpleTestCase):
         self.assertFalse(cached_data)
 
         # cache data
-        some_data = [u'abcd1234', u'l’écriture', u'寫作']
+        some_data = ['abcd1234', 'l’écriture', '寫作']
         result = dummy_func(*some_data)
 
         # test if data is in cache
@@ -137,13 +137,13 @@ class CacheTests(SimpleTestCase):
         from garage.cache import cache_key, cache_data, delete_cache
         from garage.text_utils import safe_str
 
-        key = u'abcd1234'
+        key = 'abcd1234'
 
         @cache_data(key)
         def dummy_func(*args):
-            return u'_'.join([safe_str(a) for a in args])
+            return '_'.join([safe_str(a) for a in args])
 
-        some_data = [u'abcd1234', u'l’écriture', u'寫作']
+        some_data = ['abcd1234', 'l’écriture', '寫作']
         result = dummy_func(*some_data)
 
         # test if data is in cache

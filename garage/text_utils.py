@@ -103,7 +103,7 @@ def tidy_txt(txt):
             txt = line.strip()
             if len(txt) == 0:
                 if run < 1:
-                    s.append(u'')
+                    s.append('')
                 run += 1
             else:
                 run = 0
@@ -190,7 +190,7 @@ def subs(template, context):
                   })
 
     """
-    result = u''
+    result = ''
     try:
         assert template is not None
         result = template % context

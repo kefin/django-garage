@@ -24,13 +24,13 @@ def msg(label, txt, first=False, linebreak=False, divider=DIVIDER):
     """
     from garage.text_utils import uprint, safe_unicode
     if first:
-        uprint(u'\n%s' % safe_unicode(divider))
+        uprint('\n%s' % safe_unicode(divider))
     label = safe_unicode(label)
     txt = safe_unicode(txt)
     if not linebreak:
-        uprint(u'# %-16s : %s' % (label, txt))
+        uprint('# %-16s : %s' % (label, txt))
     else:
-        uprint(u'# %-16s :\n%s' % (label, txt))
+        uprint('# %-16s :\n%s' % (label, txt))
 
 
 def module_exists(module_name):

@@ -15,12 +15,15 @@ import warnings
 try:
     from django.core.exceptions import ImproperlyConfigured
     from django.conf import settings as _django_settings
-    warnings.warn('Unable to import Django settings! Please check your setup '
-                  'and make sure Django is installed and your project settings '
-                  'are loaded correctly.', RuntimeWarning)
+    # warnings.warn('Unable to import Django settings! Please check your setup '
+    #               'and make sure Django is installed and your project settings '
+    #               'are loaded correctly.', RuntimeWarning)
 except (ImportError, ImproperlyConfigured):
     from garage.utils import DataObject
     _django_settings = DataObject()
+    warnings.warn('Unable to import Django settings! Please check your setup '
+                  'and make sure Django is installed and your project settings '
+                  'are loaded correctly.', RuntimeWarning)
 
 
 

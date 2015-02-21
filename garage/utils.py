@@ -5,7 +5,7 @@ garage.utils
 Utility functions
 
 * created: 2008-08-11 kevin chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-20 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -288,41 +288,64 @@ class DataObject(dict):
                 pass
 
 
+# def enum(*sequential, **named):
+#     """
+#     Definition for an `enum` type.
+#
+#     # enum type
+#     #
+#     # from:
+#     # http://stackoverflow.com/questions/36932/whats-the-best-way-to-implement-an-enum-in-python
+#     #
+#     # def enum(**enums):
+#     #     return type('Enum', (), enums)
+#     # Used like so:
+#     #
+#     # >>> Numbers = enum(ONE=1, TWO=2, THREE='three')
+#     # >>> Numbers.ONE
+#     # 1
+#     # >>> Numbers.TWO
+#     # 2
+#     # >>> Numbers.THREE
+#     # 'three'
+#     # You can also easily support automatic enumeration with something like this:
+#     #
+#     # def enum(*sequential, **named):
+#     #     enums = dict(zip(sequential, range(len(sequential))), **named)
+#     #     return type('Enum', (), enums)
+#     # Used like so:
+#     #
+#     # >>> Numbers = enum('ZERO', 'ONE', 'TWO')
+#     # >>> Numbers.ZERO
+#     # 0
+#     # >>> Numbers.ONE
+#     # 1
+#
+#     """
+#     enums = dict(zip(sequential, range(len(sequential))), **named)
+#     return type(str('Enum'), (), enums)
+
 def enum(*sequential, **named):
     """
-    Definition for an `enum` type.
+    Enum type with ``reverse_mapping`` dict to retrieve key from value.
 
-    # enum type
-    #
-    # from:
-    # http://stackoverflow.com/questions/36932/whats-the-best-way-to-implement-an-enum-in-python
-    #
-    # def enum(**enums):
-    #     return type('Enum', (), enums)
-    # Used like so:
-    #
-    # >>> Numbers = enum(ONE=1, TWO=2, THREE='three')
-    # >>> Numbers.ONE
-    # 1
-    # >>> Numbers.TWO
-    # 2
-    # >>> Numbers.THREE
-    # 'three'
-    # You can also easily support automatic enumeration with something like this:
-    #
-    # def enum(*sequential, **named):
-    #     enums = dict(zip(sequential, range(len(sequential))), **named)
-    #     return type('Enum', (), enums)
-    # Used like so:
-    #
-    # >>> Numbers = enum('ZERO', 'ONE', 'TWO')
-    # >>> Numbers.ZERO
-    # 0
-    # >>> Numbers.ONE
-    # 1
+    from:
+    http://stackoverflow.com/a/1695250/220783
 
+    >>> Numbers = enum(ONE=1, TWO=2, THREE='three')
+    >>> Numbers.ONE
+    1
+    >>> Numbers.TWO
+    2
+    >>> Numbers.THREE
+    'three'    
+    >>> Numbers.reverse_mapping['three']
+    'THREE'
+    
     """
     enums = dict(zip(sequential, range(len(sequential))), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
     return type(str('Enum'), (), enums)
 
 

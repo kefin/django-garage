@@ -5,13 +5,15 @@ tests.utils.tests
 Tests for garage.utils
 
 * created: 2014-08-24 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-21 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
 
 import os
 import sys
+import tempfile
+from mock import Mock, patch, call
 
 from garage.test import SimpleTestCase
 
@@ -21,6 +23,33 @@ This is a test file.
 """
 
 class UtilsTests(SimpleTestCase):
+
+    def test_open_file(self):
+        """
+        open_file should return a stream object if successful.
+        """
+        self._msg('test', 'open_file', first=True)
+        from garage.utils import open_file
+        module_dir = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(module_dir, 'testfile.txt')
+        mode = 'rt'
+        with open_file(path, mode=mode) as file_obj:
+            data = file_obj.read()
+        expected = TestData
+        self.assertEqual(data, expected)
+
+    def test_open_file_error(self):
+        """
+        open_file should raise IOError if file cannot be opened.
+        """
+        self._msg('test', 'open_file error', first=True)
+        from garage.utils import open_file
+        mode = 'rt'
+        module_dir = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(module_dir, 'non-existent-file')
+        with self.assertRaises(IOError):
+            with open_file(path, mode=mode) as file_obj:
+                data = file_obj.read()
 
     def test_get_file_contents(self):
         """
@@ -35,11 +64,28 @@ class UtilsTests(SimpleTestCase):
         self._msg('data', data, linebreak=True)
         self.assertEqual(data, TestData)
 
+    def test_get_file_contents_error(self):
+        """
+        get_file_contents should return None for a non-existent path.
+        """
+        self._msg('test', 'get_file_contents error', first=True)
+        from garage.utils import get_file_contents
+        module_dir = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(module_dir, 'non-existent-file')
+        data = get_file_contents(path)
+        self._msg('path', path)
+        self._msg('data', data, linebreak=True)
+        self.assertEqual(data, None)
+
+        data = get_file_contents(None)
+        self._msg('path', path)
+        self._msg('data', data, linebreak=True)
+        self.assertEqual(data, None)
+
     def test_write_file(self):
         """
         Ensure write_file function is working properly.
         """
-        import tempfile
         from garage.utils import write_file, get_file_contents
         self._msg('test', 'write_file', first=True)
         filename = 'garage-testfile'
@@ -54,11 +100,30 @@ class UtilsTests(SimpleTestCase):
         self.assertEqual(data, TestData)
         os.unlink(path)
 
+    def test_delete_file(self):
+        """
+        Ensure delete_file function is working properly.
+        """
+        from garage.utils import write_file, get_file_contents, delete_file
+        self._msg('test', 'delete_file', first=True)
+        filename = 'garage-testfile'
+        tmpfile_dir = tempfile.gettempdir()
+        path = os.path.join(tmpfile_dir, filename)
+        result = write_file(path, TestData)
+        self.assertTrue(result)
+        # chect contents
+        data = get_file_contents(path)
+        self._msg('path', path)
+        self._msg('data', data, linebreak=True)
+        self.assertEqual(data, TestData)
+        result = delete_file(path)
+        self.assertTrue(result is True)
+        self.assertFalse(os.path.isfile(path))
+
     def test_make_dir(self):
         """
         Ensure make_dir function is working properly.
         """
-        import tempfile
         from garage.utils import make_dir
         self._msg('test', 'make_dir', first=True)
         tmpfile_dir = tempfile.gettempdir()
@@ -132,7 +197,7 @@ class UtilsTests(SimpleTestCase):
         y = dump_yaml(data, explicit_start=True, default_flow_style=False)
         self._msg('data', data)
         self._msg('yaml', y, linebreak=True)
-        
+
     def test_sha1hash(self):
         """
         Ensure sha1hash function is working properly.
@@ -150,7 +215,7 @@ class UtilsTests(SimpleTestCase):
 
         data = 'he said, "q & a" <abc> écriture 寫作'
         result = sha1hash(data)
-        expected = '4c6e57246a9b857867d842534a618a1bdcf873be'
+        expected = '5fccbb2309b2974d0b3bdf8dcd0791a5c7168b9f'
         self._msg('data', data)
         self._msg('rexpected', expected)
         self._msg('result', result)
@@ -170,13 +235,21 @@ class UtilsTests(SimpleTestCase):
         self._msg('result', result)
         self.assertEqual(result, expected)
 
-        data = 'this is a test'
+        data = 'he said, "q & a" <abc> écriture 寫作'
         result = encode_sdata(data)
-        expected = '567468697320697'
+        expected = '56686520736169642C2022712026206122203C6162633E20E963726974757265205C75356265625C75346635630A70300A2E'
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
-        self.assertNotEqual(result, expected)
+        self.assertEqual(result, expected)
+
+        data = [n for n in range(5)]
+        result = encode_sdata(data)
+        expected = '286C70300A49300A6149310A6149320A6149330A6149340A612E'
+        self._msg('data', data)
+        self._msg('expected', expected)
+        self._msg('result', result)
+        self.assertEqual(result, expected)
 
     def test_decode_sdata(self):
         """
@@ -192,13 +265,45 @@ class UtilsTests(SimpleTestCase):
         self._msg('result', result)
         self.assertEqual(result, expected)
 
-        data = 'aaa5674686973206973206120746573740A70300A2E'
+        data = '286C70300A49300A6149310A6149320A6149330A6149340A612E'
         result = decode_sdata(data)
-        expected = 'this is a test'
+        expected = [n for n in range(5)]
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
-        self.assertEqual(result, None)
+        self.assertEqual(result, expected)
+
+    def test_decode_sdata_error(self):
+        """
+        decode_sdata should raise exception if input data is not
+        base16 string.
+        """
+        from garage.utils import decode_sdata
+        self._msg('test', 'decode_sdata', first=True)
+
+        data = ['<abc>', 'écriture', '寫作']
+        result = decode_sdata(data)
+        expected = None
+        self._msg('data', data)
+        self._msg('expected', expected)
+        self._msg('result', result)
+        self.assertEqual(result, expected)
+
+        data = 'écriture 寫作'
+        result = decode_sdata(data)
+        expected = None
+        self._msg('data', data)
+        self._msg('expected', expected)
+        self._msg('result', result)
+        self.assertEqual(result, expected)
+
+        data = '286C70300A4930'
+        result = decode_sdata(data)
+        expected = None
+        self._msg('data', data)
+        self._msg('expected', expected)
+        self._msg('result', result)
+        self.assertEqual(result, expected)
 
     def test_data_object(self):
         """
@@ -234,6 +339,30 @@ class UtilsTests(SimpleTestCase):
         for k, v in data.items():
             self.assertEqual(getattr(obj, k), v)
 
+        data = {
+            'a': 1,
+            'b': 2,
+            'c': 'three'
+        }
+        obj = DataObject()
+        obj.add(**data)
+        self._msg('data', data)
+        self._msg('obj', obj)
+        self._msg('len', len(obj))
+        self.assertEqual(len(data), len(obj))
+        for k, v in data.items():
+            self.assertEqual(getattr(obj, k), v)
+
+        data = ['a', 'b', 'c']
+        obj = DataObject()
+        obj.add(data)
+        self._msg('data', data)
+        self._msg('obj', obj)
+        self._msg('len', len(obj))
+        self.assertEqual(len(data), len(obj))
+        for k in data:
+            self.assertEqual(getattr(obj, k), True)
+
     def test_enum(self):
         """
         Ensure enum type is working properly.
@@ -249,6 +378,12 @@ class UtilsTests(SimpleTestCase):
         for k, v in data.items():
             self.assertEqual(getattr(obj, k), v)
             self._msg(k, v)
+
+        # test ``reverse_mapping`` dict
+        self.assertTrue(hasattr(obj, 'reverse_mapping'))
+        val = obj.c
+        self.assertEqual(obj.reverse_mapping[val], 'c')
+
         obj = enum('x', 'y', 'z')
         self.assertEqual(obj.x, 0)
         self.assertEqual(obj.y, 1)
@@ -256,7 +391,7 @@ class UtilsTests(SimpleTestCase):
         self._msg('x', obj.x)
         self._msg('y', obj.y)
         self._msg('z', obj.z)
-        
+
     def test_get_file_ext(self):
         """
         Ensure get_file_ext function is working properly.
@@ -274,3 +409,16 @@ class UtilsTests(SimpleTestCase):
         self.assertEqual(fext, '')
         self._msg('path', path)
         self._msg('ext', fext)
+
+    def test_cvt2list(self):
+        """
+        cvt2list should return an object as a list.
+        * This is a legacy function.
+        """
+        self._msg('test', 'cvt2list', first=True)
+        from garage.utils import cvt2list
+        data = 'abc'
+        result = cvt2list(data)
+        self.assertTrue(hasattr(result, '__iter__'))
+        self.assertTrue(len(result), 1)
+        self.assertTrue(isinstance(result, list))

@@ -14,6 +14,8 @@ import re
 import string
 from unicodedata import normalize
 
+from django.core.exceptions import ValidationError
+
 
 # general slugify function
 
@@ -28,9 +30,11 @@ def strip_accents(s):
 def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):
     """
     Convert (unicode) string to slug.
+    * This only handles Western-language strings with very basic
+      accents.
     """
-    from garage.text_utils import safe_unicode
     from garage.html_utils import strip_tags, unescape
+
     def convert_unwanted_chars(txt):
         converted = []
         for ch in txt:
@@ -39,10 +43,6 @@ def slugify(s, delete_chars=SlugDeleteChars, subst_char=SubstChar):
             converted.append(ch)
         return ''.join(converted)
 
-    try:
-        s = s.decode("utf-8")
-    except UnicodeEncodeError:
-        s = safe_unicode(s)
     s = s.strip("\r\n")
     s = s.replace("\n", " ")
     s = strip_accents(s)
@@ -84,29 +84,30 @@ def get_slug_iteration_separator():
     return get_setting('SLUG_ITERATION_SEPARATOR', SLUG_ITERATION_SEPARATOR)
 
 
-slug_pat = r'^(.+)%s(\d+)$'
-slug_regex = None
+slug_pat = r'^(.+){0}(\d+)$'
 
-def get_slug_base(s, slug_iteration_separator=None):
+def get_slug_base(slug, slug_iteration_separator=None):
     """
     Return slug minus the slug_iteration_separator + 'n' sufix.
 
     * Example: 'article--2' will return 'article' if
-    slug_iteration_separator is '--'.
+      slug_iteration_separator is '--'.
     """
-    global slug_regex
     if not slug_iteration_separator:
         slug_iteration_separator = get_slug_iteration_separator()
-    if slug_regex is None:
-        slug_regex = re.compile(slug_pat % slug_iteration_separator, re.I)
-    m = slug_regex.match(s)
-    if m:
-        return m.group(1)
-    return s
+    sep = re.escape(slug_iteration_separator)
+    slug_regex = re.compile(slug_pat.format(sep), re.I)
+    matched = slug_regex.match(slug)
+    if matched:
+        return matched.group(1)
+    else:
+        return slug
 
 
 def slug_creation_error(msg=None):
-    from django.core.exceptions import ValidationError
+    """
+    This function is UNUSED and is here for compatibility purposes.
+    """
     if msg is None:
         msg = 'Unable to create slug.'
     raise ValidationError(msg)
@@ -166,10 +167,11 @@ def get_unique_slug(instance, slug_field, queryset=None, slug_base=None,
             next += 1
             num = '%s%d' % (slug_separator, next)
     except (AttributeError, TypeError):
-        slug_creation_error()
+        msg = 'Unable to create slug.'
+        raise ValidationError(msg)
 
 
-def create_unique_slug(obj, slug_field=None):
+def create_unique_slug(obj, slug_field=None, slug_separator=None):
     """
     Create simple unique slug for object instance.
 
@@ -184,7 +186,10 @@ def create_unique_slug(obj, slug_field=None):
         sbase = get_slug_base(getattr(obj, slug_field))
     except (AttributeError, TypeError):
         sbase = None
-    slugs = get_unique_slug(obj, slug_field=slug_field, slug_base=sbase)
+    slugs = get_unique_slug(obj,
+                            slug_field=slug_field,
+                            slug_base=sbase,
+                            slug_separator=slug_separator)
     return slugs[0]
 
 

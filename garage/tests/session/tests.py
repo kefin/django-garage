@@ -5,14 +5,14 @@ tests.session.tests
 Tests for garage.session
 
 * created: 2014-08-24 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-21 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
 
-from garage.test import SimpleTestCase
-
 from mock import MagicMock
+
+from garage.test import SimpleTestCase
 
 
 class SessionTests(SimpleTestCase):

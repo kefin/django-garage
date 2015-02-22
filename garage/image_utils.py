@@ -2,12 +2,12 @@
 """
 garage.image_utils
 
-Image-processing utility functions.
+Image-processing utility functions.
 * Note: These functions read and write image files on a local file
   system.
 
 * created: 2012-08-10 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -26,8 +26,8 @@ except ImportError:
 
 DEFAULT_IMG_QUALITY = 75
 RE_PATS = [
-	r'^(.*)([_\-][0-9]+x[0-9]+)(\.[^\.]+)$',
-	r'^(.*)(\.[^\.]+)$'
+    r'^(.*)([_\-][0-9]+x[0-9]+)(\.[^\.]+)$',
+    r'^(.*)(\.[^\.]+)$'
 ]
 Regexp = None
 DEFAULT_FNAME = 'image'
@@ -36,9 +36,10 @@ DEFAULT_FNAME = 'image'
 def resize_image(img, box, fit):
     """
     Downsample image and resize to 'box' dimensions.
-    @param img: Image - an Image-object
-    @param box: tuple(x, y) - the bounding box of the result image
-    @param fit: boolean - crop the image to fill the box
+
+    :param img: Image - an Image-object
+    :param box: tuple(x, y) - the bounding box of the result image
+    :param fit: boolean - crop the image to fill the box
     """
     w, h = box
 
@@ -135,7 +136,7 @@ def get_img_ext(path, default_ext='unknown'):
         'jpeg': 'jpg',
         'bmp': 'bmp',
         'png': 'png'
-        }
+    }
     return suffix.get(imgtype, default_ext)
 
 

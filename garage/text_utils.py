@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-helpers.text_utils
+garage.text_utils
 
 Utility text and string processing functions
 
 * created: 2013-10-27 kevin chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-21 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals, print_function)
@@ -25,9 +25,9 @@ def uprint(data, encoding=default_encoding):
     :param encoding: data encoding (default is `utf-8`).
     """
     try:
-        print(data.encode(encoding))
-    except AttributeError:
         print(data)
+    except UnicodeDecodeError:
+        print(data.decode('utf-8'))
 
 
 # utility string functions
@@ -119,8 +119,11 @@ def to_camel_case(name):
     Convert name to CamelCase.
     * does not do any sanity checking (assumes name
       is somewhat already alphanumeric).
+
+    input: 'ABC__*foo bar baz qux norf 321*__'
+    outut: 'AbcFooBarBazQuxNorf321'
+
     """
-    delete_chars = """'":;,~!@#$%^&*()_+-`=<>./?\\|"""
     result = []
     prev = ' '
     for c in name:
@@ -128,9 +131,10 @@ def to_camel_case(name):
             c = c.upper()
         else:
             c = c.lower()
-        result.append(c)
+        if c.isalnum():
+            result.append(c)
         prev = c
-    return "".join(result).translate(string.maketrans(' -','__'), delete_chars)
+    return ''.join(result)
 
 
 # perform substitution on a chunk of text
@@ -154,11 +158,11 @@ def substitute(txt, context, pattern=None):
         return None
     if pattern is None:
         regexp = IdRegexp
-    elif isinstance(pattern, basestring):
+    elif isinstance(pattern, six.string_types):
         regexp = re.compile(pattern, re.I)
     else:
         regexp = pattern
-    if callable(context):
+    if hasattr(context, '__call__'):
         getval = context
     else:
         if context is None:

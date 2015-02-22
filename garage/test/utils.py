@@ -5,7 +5,7 @@ garage.test.utils
 Utility functions for tests (using Django test runner).
 
 * created: 2013-07-20 kevin chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -22,11 +22,9 @@ def msg(label, txt, first=False, linebreak=False, divider=DIVIDER):
     """
     Print out debug message.
     """
-    from garage.text_utils import uprint, safe_unicode
+    from garage.text_utils import uprint
     if first:
-        uprint('\n%s' % safe_unicode(divider))
-    label = safe_unicode(label)
-    txt = safe_unicode(txt)
+        uprint('\n%s' % divider)
     if not linebreak:
         uprint('# %-16s : %s' % (label, txt))
     else:
@@ -42,10 +40,9 @@ def module_exists(module_name):
     """
     try:
         importlib.import_module(module_name)
+        return True
     except ImportError:
         return False
-    else:
-        return True
 
 
 def function_exists(mod, func):

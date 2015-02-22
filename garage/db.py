@@ -5,7 +5,7 @@ garage.db
 Django database and queryset helper functions
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-21 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -107,7 +107,7 @@ def clone_objects(objects):
         return duplicate
 
     if not hasattr(objects,'__iter__'):
-        objects = [ objects ]
+        objects = [objects]
 
     objs = []
     for obj in objects:

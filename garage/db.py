@@ -5,7 +5,7 @@ garage.db
 Django database and queryset helper functions
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2015-02-21 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -44,7 +44,7 @@ def batch_qs(qs, batch_size=DEFAULT_QS_BATCH_SIZE):
 
     Usage:
 
-    # Make sure to order your querset
+    # Make sure to order your queryset before using this function
     article_qs = Article.objects.order_by('id')
     for start, end, total, qs in batch_qs(article_qs):
         print "Now processing %s - %s of %s" % (start + 1, end, total)
@@ -89,6 +89,9 @@ def clone_objects(objects):
       http://www.bromer.eu/2009/05/23/a-generic-copyclone-action-for-django-11/
       http://djangosnippets.org/snippets/1271/
     * The function below combines code from the above reference articles.
+
+    :pram objects: model instances to clone
+    :returns: new objects list
     """
     def clone(obj):
         """Return an identical copy of the instance with a new ID."""

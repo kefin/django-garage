@@ -90,7 +90,7 @@ def clone_objects(objects):
       http://djangosnippets.org/snippets/1271/
     * The function below combines code from the above reference articles.
 
-    :pram objects: model instances to clone
+    :param objects: model instances to clone
     :returns: new objects list
     """
     def clone(obj):

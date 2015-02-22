@@ -5,7 +5,7 @@ garage.cache
 Cache helpers.
 
 * created: 2011-03-14 Kevin Chan <kefin@makedostudio.com>
-* updated: 2015-02-21 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -13,7 +13,10 @@ from __future__ import (absolute_import, unicode_literals)
 import six
 import functools
 import hashlib
-import pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 from django.core.cache import cache
 

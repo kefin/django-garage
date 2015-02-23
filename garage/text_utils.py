@@ -5,7 +5,7 @@ garage.text_utils
 Utility text and string processing functions
 
 * created: 2013-10-27 kevin chan <kefin@makedostudio.com>
-* updated: 2015-02-21 kchan
+* updated: 2015-02-23 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals, print_function)
@@ -14,8 +14,8 @@ import six
 import re
 import string
 
+from garage.utils import default_encoding
 
-default_encoding = "utf-8"
 
 def uprint(data, encoding=default_encoding):
     """

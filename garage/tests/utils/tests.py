@@ -22,7 +22,36 @@ TestData = """\
 This is a test file.
 """
 
+class DummyTestObject(object):
+    """
+    Object definition to test get_instance.
+    """
+    name = 'dummy_test_object'
+
+
 class UtilsTests(SimpleTestCase):
+
+    def test_get_instance(self):
+        """
+        get_instance should return instance from module class.
+        """
+        self._msg('test', 'get_instance', first=True)
+        from garage.utils import get_instance
+        inst = get_instance('garage.tests.utils.tests', 'DummyTestObject')
+        self.assertTrue(inst is not None)
+        self.assertEqual(inst.name, 'dummy_test_object')
+        self._msg('instance', inst)
+
+    def test_encoding_constants(self):
+        """
+        garage.utils should contain a "default_encoding" constant.
+        """
+        self._msg('test', 'encoding constants', first=True)
+        try:
+            from garage.utils import default_text_encoding, default_encoding
+        except ImportError:
+            self.fail('default_text_encoding and default_encoding not found')
+        self.assertEqual(default_encoding, 'utf-8')
 
     def test_open_file(self):
         """
@@ -100,6 +129,23 @@ class UtilsTests(SimpleTestCase):
         self.assertEqual(data, TestData)
         os.unlink(path)
 
+    def test_write_file_error(self):
+        """
+        write_file should return False if there is an IOError.
+        """
+        from garage.utils import write_file, get_file_contents
+        self._msg('test', 'write_file', first=True)
+
+        with patch('garage.utils.open_file') as mock_open_file:
+            mock_open_file.side_effect = IOError
+            path = 'testfile.txt'
+            result = write_file(path, TestData)
+            calls = mock_open_file.mock_calls
+            self._msg('calls', calls)
+
+        self.assertFalse(result)
+        self._msg('result', result)
+
     def test_delete_file(self):
         """
         Ensure delete_file function is working properly.
@@ -117,7 +163,19 @@ class UtilsTests(SimpleTestCase):
         self._msg('data', data, linebreak=True)
         self.assertEqual(data, TestData)
         result = delete_file(path)
-        self.assertTrue(result is True)
+        self.assertTrue(result)
+        self.assertFalse(os.path.isfile(path))
+
+    def test_delete_nonexistent_file(self):
+        """
+        delete_file should bypass deletion and return True if file
+        does not exist.
+        """
+        from garage.utils import write_file, get_file_contents, delete_file
+        self._msg('test', 'delete non-existent file', first=True)
+        path = 'garage-non-existent-testfile'
+        result = delete_file(path)
+        self.assertTrue(result)
         self.assertFalse(os.path.isfile(path))
 
     def test_make_dir(self):

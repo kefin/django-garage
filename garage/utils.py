@@ -138,6 +138,9 @@ def delete_file(path):
     :param path: file system path for file
     :returns: True if file is unlinked (no longer found) else False
     """
+    if os.path.isfile(path) is False:
+        # file does not exist
+        return True
     with open_file(path, mode='wb') as file_obj:
         file_obj.truncate(0)
     try:

@@ -5,6 +5,8 @@ include MANIFEST.in
 recursive-include docs *
 recursive-include garage/tests/*/*.txt
 recursive-include garage/tests/*/*.yaml
+recursive-include garage/tests/image_utils/img/tests/*
+recursive-include garage/tests/image_utils/img/tests/thumbs/*
 
 global-exclude docs/build
 global-exclude .DS_Store *.hgignore *.hgtags *_hgignore.txt *_gitignore.txt *.gitignore *.git *.hg

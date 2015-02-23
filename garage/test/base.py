@@ -5,12 +5,12 @@ garage.test.base
 Test classes based on Django TestCase
 
 * created: 2013-07-21 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
 
-from django.utils import unittest
+import unittest
 
 from garage import get_setting as _s
 from garage.test.utils import msg

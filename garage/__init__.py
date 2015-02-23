@@ -52,7 +52,7 @@ def get_setting(name, default=None):
     return getattr(_django_settings, name, default)
 
 
-# legacy functions for compatibility with old imports
+# legacy functions for compatibility with old code using this package
 
 def resp(request, template, context):
     """Shortcut for render_to_response()."""
@@ -62,5 +62,5 @@ def resp(request, template, context):
                               context_instance=RequestContext(request))
 
 
-# for compatibility with old version
+# for compatibility with old code that imports the following from here
 from garage.session import set_session_var, get_session_var

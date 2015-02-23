@@ -2,7 +2,8 @@
 """
 garage.cache
 
-Cache helpers.
+Cache helpers
+* The cache functions/decorators use the Django's caching backend.
 
 * created: 2011-03-14 Kevin Chan <kefin@makedostudio.com>
 * updated: 2015-02-22 kchan
@@ -20,9 +21,6 @@ except ImportError:
 
 from django.core.cache import cache
 
-
-# cache helpers
-# * uses django caching backend
 
 def s2hex(s):
     """
@@ -45,7 +43,7 @@ CACHE_KEY_SEPARATOR = '/'
 
 def cache_key(keystr, *args, **kwargs):
     """
-    helper function to calculate cache key.
+    A helper function to calculate a hashed cache key.
     * accepts the following keyword parameters:
       key_separator -- separator string to use when concatenating args
       prefix -- prefix to prepend to key (after hashing)
@@ -88,8 +86,20 @@ DEFAULT_TIMEOUT = 1800
 
 def cache_data(key=None, timeout=DEFAULT_TIMEOUT):
     """
-    Decorator to cache objects.
+    A decorator to cache objects.
     * see: http://djangosnippets.org/snippets/492/
+
+    How to use:
+
+    # cache output of ``myfunc`` for 5 min.
+    @cache_data(key='mymodule.myfunc', timeout=300)
+    def myfunc(arg):
+        ...
+
+    # to delete/invalidate cached data, use the ``delete_cache``
+    # function:
+    delete_cache('mymodule.myfunc')
+
     """
     def decorator(f):
         @functools.wraps(f)

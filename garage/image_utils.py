@@ -4,7 +4,7 @@ garage.image_utils
 
 Image-processing utility functions.
 * Note: These functions read and write image files on a local file
-  system.
+  system using PIL or Pillow.
 
 * created: 2012-08-10 Kevin Chan <kefin@makedostudio.com>
 * updated: 2015-02-22 kchan

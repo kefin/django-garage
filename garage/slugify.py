@@ -3,6 +3,8 @@
 garage.slugify
 
 Functions to create slugs.
+* For situations where Django's slugify functions don't do exactly
+  what you need them to do.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
 * updated: 2014-11-21 kchan

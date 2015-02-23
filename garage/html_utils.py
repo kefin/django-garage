@@ -4,6 +4,8 @@ garage.html_utils
 
 Utility functions to handle html-text conversions.
 
+* FIXME: need to reorganize, refactor and delete unnecessary code.
+
 * created: 2008-06-22 kevin chan <kefin@makedostudio.com>
 * updated: 2014-11-21 kchan
 """

@@ -10,7 +10,10 @@ Tests for garage.cache
 
 from __future__ import (absolute_import, unicode_literals)
 
-import pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import six
 
 from garage.test import SimpleTestCase
@@ -40,8 +43,17 @@ class CacheTests(SimpleTestCase):
         self._msg('result', result)
         self.assertEqual(result, md5hash)
 
+        # cPickle and pickle produces different output for the
+        # identical data structure
+        try:
+            import cPickle
+            # using cPickle.dumps
+            md5hash = 'e3166d75522955dce348b412695a7965'
+        except ImportError:
+            # using pickle.dumps
+            md5hash = 'ae0f56e9c34a13072ddf950d4d0e32d3'
+            
         data = ['foo', 'bar', 'baz']
-        md5hash = 'ae0f56e9c34a13072ddf950d4d0e32d3'
         result = s2hex(data)
         self._msg('test', 's2hex', first=True)
         self._msg('data', data)

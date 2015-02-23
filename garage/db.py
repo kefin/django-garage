@@ -2,7 +2,7 @@
 """
 garage.db
 
-Django database and queryset helper functions
+Helper functions for managing Django models and fetching querysets.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
 * updated: 2015-02-22 kchan

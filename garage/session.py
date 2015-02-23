@@ -3,6 +3,7 @@
 garage.session
 
 Helper functions to set/get session data.
+* The ``session`` object must be in the ``request`` passed to the functions.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
 * updated: 2014-11-21 kchan

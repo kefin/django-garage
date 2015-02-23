@@ -5,7 +5,7 @@ tests.utils.tests
 Tests for garage.utils
 
 * created: 2014-08-24 Kevin Chan <kefin@makedostudio.com>
-* updated: 2015-02-21 kchan
+* updated: 2015-02-23 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -223,33 +223,43 @@ class UtilsTests(SimpleTestCase):
 
     def test_encode_sdata(self):
         """
-        Ensure encode_sdata function is working properly.
+        encode_sdata should encode data into a byte string.
+        * NOTE: returned data is a byte string (not unicode)
         """
         from garage.utils import encode_sdata
         self._msg('test', 'encode_sdata', first=True)
         data = 'this is a test'
         result = encode_sdata(data)
-        expected = '5674686973206973206120746573740A70300A2E'
+        expected = b'5674686973206973206120746573740A70310A2E'
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
+        self._msg('expected type', type(expected))
+        self._msg('result type', type(result))
         self.assertEqual(result, expected)
+        self.assertEqual(type(result), type(expected))
 
         data = 'he said, "q & a" <abc> écriture 寫作'
         result = encode_sdata(data)
-        expected = '56686520736169642C2022712026206122203C6162633E20E963726974757265205C75356265625C75346635630A70300A2E'
+        expected = b'56686520736169642C2022712026206122203C6162633E20E963726974757265205C75356265625C75346635630A70310A2E'
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
+        self._msg('expected type', type(expected))
+        self._msg('result type', type(result))
         self.assertEqual(result, expected)
+        self.assertEqual(type(result), type(expected))
 
-        data = [n for n in range(5)]
+        data = [n for n in xrange(5)]
         result = encode_sdata(data)
-        expected = '286C70300A49300A6149310A6149320A6149330A6149340A612E'
+        expected = b'286C70310A49300A6149310A6149320A6149330A6149340A612E'
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
+        self._msg('expected type', type(expected))
+        self._msg('result type', type(result))
         self.assertEqual(result, expected)
+        self.assertEqual(type(result), type(expected))
 
     def test_decode_sdata(self):
         """
@@ -257,26 +267,44 @@ class UtilsTests(SimpleTestCase):
         """
         from garage.utils import decode_sdata
         self._msg('test', 'decode_sdata', first=True)
-        data = '5674686973206973206120746573740A70300A2E'
+
+        data = b'5674686973206973206120746573740A70310A2E'
         result = decode_sdata(data)
         expected = 'this is a test'
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
+        self._msg('expected type', type(expected))
+        self._msg('result type', type(result))
         self.assertEqual(result, expected)
+        self.assertEqual(type(result), type(expected))
 
-        data = '286C70300A49300A6149310A6149320A6149330A6149340A612E'
+        data = b'56686520736169642C2022712026206122203C6162633E20E963726974757265205C75356265625C75346635630A70310A2E'
+        result = decode_sdata(data)
+        expected = 'he said, "q & a" <abc> écriture 寫作'
+        self._msg('data', data)
+        self._msg('expected', expected)
+        self._msg('result', result)
+        self._msg('expected type', type(expected))
+        self._msg('result type', type(result))
+        self.assertEqual(result, expected)
+        self.assertEqual(type(result), type(expected))
+
+        data = b'286C70310A49300A6149310A6149320A6149330A6149340A612E'
         result = decode_sdata(data)
         expected = [n for n in range(5)]
         self._msg('data', data)
         self._msg('expected', expected)
         self._msg('result', result)
+        self._msg('expected type', type(expected))
+        self._msg('result type', type(result))
         self.assertEqual(result, expected)
+        self.assertEqual(type(result), type(expected))
 
     def test_decode_sdata_error(self):
         """
         decode_sdata should raise exception if input data is not
-        base16 string.
+        base16 byte string.
         """
         from garage.utils import decode_sdata
         self._msg('test', 'decode_sdata', first=True)
@@ -297,7 +325,7 @@ class UtilsTests(SimpleTestCase):
         self._msg('result', result)
         self.assertEqual(result, expected)
 
-        data = '286C70300A4930'
+        data = b'286C70300A4930'
         result = decode_sdata(data)
         expected = None
         self._msg('data', data)

@@ -2,10 +2,10 @@
 """
 garage.utils
 
-Utility functions
+General utility functions.
 
 * created: 2008-08-11 kevin chan <kefin@makedostudio.com>
-* updated: 2015-02-20 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -17,7 +17,12 @@ import re
 import hashlib
 import base64
 import codecs
-import pickle
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import yaml
 
 try:
@@ -225,7 +230,7 @@ def encode_sdata(data):
       Python data.
 
     :param data: any Python data object
-    :returns: pickled string of data
+    :returns: pickled byte string of data
     """
     return base64.b16encode(pickle.dumps(data))
 
@@ -240,7 +245,7 @@ def decode_sdata(encoded_string):
     """
     try:
         return pickle.loads(base64.b16decode(encoded_string))
-    except (TypeError, EOFError):
+    except (TypeError, EOFError, pickle.UnpicklingError):
         return None
 
 

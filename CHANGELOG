@@ -1,5 +1,16 @@
 CHANGELOG
 
+2015-02-23  Kevin Chan  <kefin@makedostudio.com>
+
+        * Bumped version to 0.1.12.
+        * Performed a series of refactoring and code cleanup.
+        * Added missing tests.
+        * Added import for cPickle (when available).
+        * Updated import override_settings to import from django.test.utils
+        * Added test images to image_utils/tests/img.
+        * Updated enum function in utils (added 'reverse_mapping' dict from
+        http://stackoverflow.com/a/1695250/220783).
+
 2014-11-21  Kevin Chan  <kefin@makedostudio.com>
 
         * Bumped version to 0.1.11.

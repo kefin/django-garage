@@ -5,7 +5,7 @@ tests.logger.tests
 Tests for garage.logger
 
 * created: 2014-08-24 Kevin Chan <kefin@makedostudio.com>
-* updated: 2015-02-21 kchan
+* updated: 2015-02-23 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -15,7 +15,11 @@ import tempfile
 import re
 from mock import Mock, patch, call
 
-from django.test import override_settings
+try:
+    from django.test import override_settings
+except ImportError:
+    from django.test.utils import override_settings
+
 from garage.test import SimpleTestCase
 
 

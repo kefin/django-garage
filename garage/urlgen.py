@@ -7,7 +7,7 @@ Django Uri Param Generator
 from:
 http://djangosnippets.org/snippets/1734/
 
-
+-----------------------------------
 USAGE EXAMPLE
 
 [ urlGen Location ]
@@ -34,8 +34,7 @@ order = uri.generate('order', request.GET)
 page = uri.generate('page', {'search': 'unus', 'order': 'name', 'page': 15})
 # OUTPUT
 # ?search=unus&order=name&page=
-
-
+-----------------------------------
 
 * created: 2011-01-07 Kevin Chan <kefin@makedostudio.com>
 * updated: 2014-11-21 kchan
@@ -110,8 +109,10 @@ class urlGen:
 
         return self.querystring
 
+    # original version:
+    #
     # def appendQuerystring(self, param, value = False):
-
+    #
     #     """
     #     Appends a param to the current querystring
     #     """
@@ -125,8 +126,7 @@ class urlGen:
     #             self.querystring  = '%s&%s=' % (self.querystring, str(param))
     #         else:
     #             self.querystring  = '%s&%s=%s' % (self.querystring, str(param), str(value))
-
-
+    
     def appendQuerystring(self, param, value=False):
 
         """

@@ -2,10 +2,10 @@
 """
 garage.utils
 
-Utility functions
+General utility functions.
 
 * created: 2008-08-11 kevin chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-22 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -17,7 +17,12 @@ import re
 import hashlib
 import base64
 import codecs
-import pickle
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import yaml
 
 try:
@@ -47,42 +52,102 @@ def get_instance(module, class_name, *args, **kwargs):
     return obj
 
 
-default_encoding = "utf-8"
+# file read/write/delete helper functions
 
-def get_file_contents(path, encoding=default_encoding):
+default_text_encoding = "utf-8"
+default_encoding = default_text_encoding
+
+def open_file(path, mode=None, encoding=None, **kwargs):
     """
-    Load text file from file system and return content as string.
-    * default encoding is utf-8
+    Helper function to open a file for reading/writing.
 
-    :param path: path to file on local file system
-    :param encoding: encoding for file date (default: utf-8)
-    :returns: file data or None is file cannot be read
+    :param path: path of file to read.
+    :param mode: "b" for bytes or "t" for text (default is "t")
+    :param encoding: file encoding for text (default is `utf-8`).
+    :returns: stream object for reading/writing
+    """
+    try:
+        from io import open as _open
+    except ImportError:
+        def _open(path, mode=None, encoding=None, **kwargs):
+            return codecs.open(path, mode, encoding=encoding, **kwargs)
+    return _open(path, mode=mode, encoding=encoding, **kwargs)
+
+
+def get_file_contents(path, mode=None, encoding=None, **kwargs):
+    """
+    Load text file from file system and return content as text.
+
+    :param path: path of file to read.
+    :param mode: "b" for bytes or "t" for text (default is "t")
+    :param encoding: file encoding for text (default is `utf-8`).
+    :returns: file content as string or `None` if file cannot be read.
+
+    This function reads the entire content of the file before
+    returning the data as a string or as bytes.
     """
     try:
         assert path is not None and os.path.isfile(path)
-        file_obj = codecs.open(path, "r", encoding)
-        data = file_obj.read()
-        file_obj.close()
-    except (TypeError, AssertionError, IOError):
+    except AssertionError:
         data = None
+    else:
+        if not mode:
+            mode = ''
+        mode = 'r%s' % mode
+        if 'b' in mode:
+            encoding = None
+        else:
+            # read file as text
+            if not encoding:
+                encoding = default_text_encoding
+        with open_file(path, mode=mode, encoding=encoding, **kwargs) as file_obj:
+            data = file_obj.read()
     return data
 
 
-def write_file(path, data, encoding=default_encoding):
+def write_file(path, data, mode=None, encoding=None, **kwargs):
     """
-    Write text to local file system.
+    Write text file to file system.
 
-    :param path: path to file to write to on local file system
-    :param encoding: encoding for file date (default: utf-8)
-    :returns: True if successful else False
+    :param path: path of file to write to.
+    :param data: data to write.
+    :param mode: "b" for bytes or "t" for text (default is "t")
+    :param encoding: file encoding for text (default is `utf-8`).
+    :returns: `True` if no error or `False` if ``IOError``.
     """
+    if not mode:
+        mode = ''
+    mode = 'w%s' % mode
+    if 'b' in mode:
+        encoding = None
+    else:
+        if not encoding:
+            encoding = default_text_encoding
     try:
-        the_file = open(path, 'wb')
-        the_file.write(data.encode(encoding))
-        the_file.close()
+        with open_file(path, mode=mode, encoding=encoding, **kwargs) as file_obj:
+            file_obj.write(data)
         return True
     except IOError:
         return False
+
+
+def delete_file(path):
+    """
+    Truncates file to zero size and unlinks file.
+
+    :param path: file system path for file
+    :returns: True if file is unlinked (no longer found) else False
+    """
+    if os.path.isfile(path) is False:
+        # file does not exist
+        return True
+    with open_file(path, mode='wb') as file_obj:
+        file_obj.truncate(0)
+    try:
+        os.unlink(path)
+    except OSError:
+        pass
+    return os.path.isfile(path) is False
 
 
 def make_dir(path):
@@ -107,13 +172,13 @@ def make_dir(path):
 
 # YAML utilities
 
-# yaml usage:
-# data = load(stream, Loader=Loader)
-# output = dump(data, Dumper=Dumper)
-
 def load_yaml(data):
     """
     Parse yaml data.
+
+    # yaml usage:
+    # data = load(stream, Loader=Loader)
+    # output = dump(data, Dumper=Dumper)
 
     :param data: YAML-formatted data
     :returns: loaded data structure
@@ -151,13 +216,10 @@ def sha1hash(s):
     """
     Calculate sha1 hash in hex for string.
     """
-    from garage.text_utils import safe_str
     try:
         return hashlib.sha1(s).hexdigest()
     except UnicodeEncodeError:
-        return hashlib.sha1(safe_str(s)).hexdigest()
-    except:
-        return hashlib.sha1(repr(s)).hexdigest()
+        return hashlib.sha1(s.encode('utf-8')).hexdigest()
 
 
 # encode/decode functions
@@ -167,25 +229,26 @@ def sha1hash(s):
 def encode_sdata(data):
     """
     Encode data (dict) using pickle, b16encode and base64
+    * Use ``decode_sdata`` to convert base16-encoded string back into
+      Python data.
 
     :param data: any Python data object
-    :returns: pickled string of data
+    :returns: pickled byte string of data
     """
-    try:
-        return base64.b16encode(pickle.dumps(data))
-    except:
-        return ''
+    return base64.b16encode(pickle.dumps(data))
 
 def decode_sdata(encoded_string):
     """
     Decode data pickled and encoded using encode_sdata
+    * Input must be base16-encoded string produced by the
+      ``encode_sdata`` function.
 
     :param encoded_string: pickled string of data
-    :returns: unpickled data
+    :returns: unpickled data or None if error
     """
     try:
         return pickle.loads(base64.b16decode(encoded_string))
-    except:
+    except (TypeError, EOFError, pickle.UnpicklingError):
         return None
 
 
@@ -290,39 +353,25 @@ class DataObject(dict):
 
 def enum(*sequential, **named):
     """
-    Definition for an `enum` type.
+    Enum type with ``reverse_mapping`` dict to retrieve key from value.
 
-    # enum type
-    #
-    # from:
-    # http://stackoverflow.com/questions/36932/whats-the-best-way-to-implement-an-enum-in-python
-    #
-    # def enum(**enums):
-    #     return type('Enum', (), enums)
-    # Used like so:
-    #
-    # >>> Numbers = enum(ONE=1, TWO=2, THREE='three')
-    # >>> Numbers.ONE
-    # 1
-    # >>> Numbers.TWO
-    # 2
-    # >>> Numbers.THREE
-    # 'three'
-    # You can also easily support automatic enumeration with something like this:
-    #
-    # def enum(*sequential, **named):
-    #     enums = dict(zip(sequential, range(len(sequential))), **named)
-    #     return type('Enum', (), enums)
-    # Used like so:
-    #
-    # >>> Numbers = enum('ZERO', 'ONE', 'TWO')
-    # >>> Numbers.ZERO
-    # 0
-    # >>> Numbers.ONE
-    # 1
+    from:
+    http://stackoverflow.com/a/1695250/220783
+
+    >>> Numbers = enum(ONE=1, TWO=2, THREE='three')
+    >>> Numbers.ONE
+    1
+    >>> Numbers.TWO
+    2
+    >>> Numbers.THREE
+    'three'
+    >>> Numbers.reverse_mapping['three']
+    'THREE'
 
     """
     enums = dict(zip(sequential, range(len(sequential))), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
     return type(str('Enum'), (), enums)
 
 

@@ -4,6 +4,18 @@ garage.logger
 
 Logging for debug purposes.
 
+HOW TO USE:
+
+    # set the following in your Django project settings:
+    LOG_DIR = os.path.join(SITE_ROOT, 'log')
+    LOG_FILE = os.path.join(LOG_DIR, '%s.log' % server_acct)
+    LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    LOG_PROJECT_CODE = server_acct
+
+    # import "logger" and log debug messages with logger().debug():
+    from garage.logger import logger
+    logger().debug('this is a debug message')
+
 * created: 2011-03-13 Kevin Chan <kefin@makedostudio.com>
 * updated: 2014-11-21 kchan
 """

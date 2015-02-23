@@ -5,12 +5,15 @@ tests.datetime.tests
 Tests for garage.datetime
 
 * created: 2014-08-23 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-02-23 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
 
-from django.test.utils import override_settings
+try:
+    from django.test import override_settings
+except ImportError:
+    from django.test.utils import override_settings
 
 from garage.test import SimpleTestCase
 

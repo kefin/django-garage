@@ -26,5 +26,5 @@ def get_session_var(request, skey, default=None):
     """Get value from session cookie."""
     try:
         return request.session[skey]
-    except (TypeError, AttributeError):
+    except (KeyError, TypeError, AttributeError):
         return default

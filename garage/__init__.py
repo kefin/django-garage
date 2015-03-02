@@ -5,7 +5,7 @@ garage
 Utilities and helpers functions.
 
 * created: 2011-02-15 Kevin Chan <kefin@makedostudio.com>
-* updated: 2015-02-23 kchan
+* updated: 2015-03-02 kchan
 """
 
 from __future__ import (absolute_import, unicode_literals)
@@ -26,7 +26,7 @@ except (ImportError, ImproperlyConfigured):
 
 # package version
 __author__ = 'Kevin Chan'
-__version_info__ = (0, 1, 12)
+__version_info__ = (0, 1, 13)
 __version__ = '.'.join(map(str, __version_info__))
 
 VERSION = __version_info__

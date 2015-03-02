@@ -4,7 +4,7 @@ setup.py
 Setup.py for django-garage.
 
 * created: 2013-01-12 Kevin Chan <kefin@makedostudio.com>
-* updated: 2014-11-21 kchan
+* updated: 2015-03-02 kchan
 """
 
 import os
@@ -18,8 +18,8 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = "django-garage",
-    version = "0.1.12",
-    packages = ['garage'],
+    version = "0.1.13",
+    packages = ['garage','garage.test'],
     include_package_data = True,
     license = "BSD",
     description = "A collection of useful functions and modules for Django development",

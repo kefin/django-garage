@@ -1,5 +1,10 @@
 CHANGELOG
 
+2015-03-02  Kevin Chan  <kefin@makedostudio.com>
+
+        * Bumped version to 0.1.13.
+        * Added missing 'garage.test' module to setup install packages.
+
 2015-02-23  Kevin Chan  <kefin@makedostudio.com>
 
         * Bumped version to 0.1.12.
